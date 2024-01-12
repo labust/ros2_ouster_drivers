@@ -18,6 +18,7 @@
 #include <vector>
 
 #include "rclcpp/qos.hpp"
+#include "rmw/qos_profiles.h"
 #include "ros2_ouster/exception.hpp"
 #include "ros2_ouster/interfaces/lifecycle_interface.hpp"
 #include "ros2_ouster/interfaces/sensor_interface.hpp"
@@ -120,6 +121,11 @@ void OusterDriver::onConfigure()
   _full_rotation_accumulator = std::make_shared<sensor::FullRotationAccumulator>(
     _sensor->getMetadata(), _sensor->getPacketFormat());
 
+
+  auto qos_profile = rclcpp::SensorDataQoS();
+  
+  auto custom_qos = rclcpp::QoS(rclcpp::KeepLast(1), rmw_qos_profile_sensor_data);
+
   if (_use_system_default_qos) {
     RCLCPP_INFO(
       this->get_logger(), "Using system defaults QoS for sensor data");
@@ -130,7 +136,7 @@ void OusterDriver::onConfigure()
   } else {
     _data_processors = ros2_ouster::createProcessors(
       shared_from_this(), _sensor->getMetadata(), _imu_data_frame, _laser_data_frame,
-      rclcpp::SensorDataQoS(), _sensor->getPacketFormat(), _full_rotation_accumulator, _proc_mask);
+      custom_qos, _sensor->getPacketFormat(), _full_rotation_accumulator, _proc_mask);
   }
 
   _tf_b = std::make_unique<tf2_ros::StaticTransformBroadcaster>(

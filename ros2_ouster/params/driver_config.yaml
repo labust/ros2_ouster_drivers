@@ -1,12 +1,12 @@
 ouster_driver:
   ros__parameters:
-    lidar_ip: 10.0.108.10        
-    computer_ip: 10.0.10.84  
-    lidar_mode: "1024x10"
-    imu_port: 7503
-    lidar_port: 7502
+    lidar_ip: 10.0.50.150        
+    computer_ip: 10.0.50.101  
+    lidar_mode: "512x10"
+    imu_port: 7502
+    lidar_port: 7503
     sensor_frame: laser_sensor_frame
-    laser_frame: laser_data_frame
+    laser_frame: lacroma/ouster
     imu_frame: imu_data_frame
 
     # if False, data are published with sensor data QoS. This is preferrable
@@ -49,4 +49,4 @@ ouster_driver:
     # IMG|PCL|IMU|SCAN
     # PCL
     #
-    proc_mask: IMG|PCL|IMU|SCAN
+    proc_mask: PCL
